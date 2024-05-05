@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<con:soapui-project activeEnvironment="Default" name="SMSNotificationService" resourceRoot="" soapui-version="4.6.3" abortOnError="false" runType="SEQUENTIAL" xmlns:con="http://eviware.com/soapui/config"><con:settings/><con:interface xsi:type="con:WsdlInterface" wsaVersion="NONE" name="SMSNotificationServiceSoapBinding" type="wsdl" bindingName="{http://input.smsnotification.bitbank.com/}SMSNotificationServiceSoapBinding" soapVersion="1_1" anonymous="optional" definition="http://localhost:8080/SMSNotificationService?wsdl" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart="http://localhost:8080/SMSNotificationService?wsdl"><con:part><con:url>http://localhost:8080/SMSNotificationService?wsdl</con:url><con:content><![CDATA[<wsdl:definitions name="SMSNotificationService" targetNamespace="http://input.smsnotification.bitbank.com/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:tns="http://input.smsnotification.bitbank.com/" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:ns1="http://schemas.xmlsoap.org/soap/http">
+  <wsdl:types>
+    <xs:schema elementFormDefault="unqualified" targetNamespace="http://input.smsnotification.bitbank.com/" version="1.0" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+      <xs:element name="SMSResponse" type="tns:SMSResponseType"/>
+      <xs:element name="sendSMSMessage" type="tns:sendSMSMessage"/>
+      <xs:element name="sendSMSMessageResponse" type="tns:sendSMSMessageResponse"/>
+      <xs:complexType name="sendSMSMessage">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="smsMessage" type="tns:soapInputMessage"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="soapInputMessage">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="activityID" type="xs:string"/>
+          <xs:element minOccurs="0" name="phone" type="xs:string"/>
+          <xs:element minOccurs="0" name="smsText" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="sendSMSMessageResponse">
+        <xs:sequence>
+          <xs:element minOccurs="0" name="return" type="tns:SMSResponseType"/>
+        </xs:sequence>
+      </xs:complexType>
+      <xs:complexType name="SMSResponseType">
+        <xs:sequence>
+          <xs:element name="messageID" type="xs:long"/>
+          <xs:element name="errorCode" nillable="true" type="xs:string"/>
+          <xs:element name="errorMessage" nillable="true" type="xs:string"/>
+        </xs:sequence>
+      </xs:complexType>
+    </xs:schema>
+  </wsdl:types>
+  <wsdl:message name="sendSMSMessageResponse">
+    <wsdl:part element="tns:sendSMSMessageResponse" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:message name="sendSMSMessage">
+    <wsdl:part element="tns:sendSMSMessage" name="parameters"></wsdl:part>
+  </wsdl:message>
+  <wsdl:portType name="SoapMessageReceiver">
+    <wsdl:operation name="sendSMSMessage">
+      <wsdl:input message="tns:sendSMSMessage" name="sendSMSMessage"></wsdl:input>
+      <wsdl:output message="tns:sendSMSMessageResponse" name="sendSMSMessageResponse"></wsdl:output>
+    </wsdl:operation>
+  </wsdl:portType>
+  <wsdl:binding name="SMSNotificationServiceSoapBinding" type="tns:SoapMessageReceiver">
+    <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http"/>
+    <wsdl:operation name="sendSMSMessage">
+      <soap:operation soapAction="" style="document"/>
+      <wsdl:input name="sendSMSMessage">
+        <soap:body use="literal"/>
+      </wsdl:input>
+      <wsdl:output name="sendSMSMessageResponse">
+        <soap:body use="literal"/>
+      </wsdl:output>
+    </wsdl:operation>
+  </wsdl:binding>
+  <wsdl:service name="SMSNotificationService">
+    <wsdl:port binding="tns:SMSNotificationServiceSoapBinding" name="SoapMessageReceiverImplPort">
+      <soap:address location="http://localhost:8080/SMSNotificationService"/>
+    </wsdl:port>
+  </wsdl:service>
+</wsdl:definitions>]]></con:content><con:type>http://schemas.xmlsoap.org/wsdl/</con:type></con:part></con:definitionCache><con:endpoints><con:endpoint>http://192.168.103.40:8081/SMSNotificationService/SMSNotificationService</con:endpoint><con:endpoint>http://localhost:8080/SMSNotificationService</con:endpoint></con:endpoints><con:operation isOneWay="false" action="" name="sendSMSMessage" bindingOperationName="sendSMSMessage" type="Request-Response" outputName="sendSMSMessageResponse" inputName="sendSMSMessage" receivesAttachments="false" sendsAttachments="false" anonymous="optional"><con:settings/><con:call name="Request 1"><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://localhost:8080/SMSNotificationService</con:endpoint><con:request><![CDATA[<SOAP-ENV:Envelope xmlns:SOAP-ENV="http://schemas.xmlsoap.org/soap/envelope/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:xsd="http://www.w3.org/2001/XMLSchema">
+	<SOAP-ENV:Body>
+		<ns:sendSMSMessage xmlns:ns="http://input.smsnotification.bitbank.com/">
+			<ns:smsMessage>
+				<activityID>111</activityID>
+				<phone>+380672207878</phone>
+				<smsText>Привет Олег!</smsText>
+			</ns:smsMessage>
+		</ns:sendSMSMessage>
+	</SOAP-ENV:Body>
+</SOAP-ENV:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://input.smsnotification.bitbank.com/SoapMessageReceiver/sendSMSMessage"/><con:wsrmConfig version="1.2"/></con:call></con:operation></con:interface><con:interface xsi:type="con:RestService" wadlVersion="http://wadl.dev.java.net/2009/02" name="UfnSmsController" type="rest" basePath="/ufn" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:settings/><con:definitionCache type="TEXT" rootPart=""/><con:endpoints><con:endpoint>http://10.10.7.29:8060/smsNotification</con:endpoint><con:endpoint>http://10.10.7.29:8075/SMSNotificationService</con:endpoint><con:endpoint>http://192.168.103.40:8081/SMSNotificationService</con:endpoint><con:endpoint>http://localhost:8080/SMSNotificationService</con:endpoint></con:endpoints><con:resource name="operationPerformed" path="/operationPerformed"><con:settings/><con:parameters/><con:method name="operationPerformedMeth" method="POST"><con:settings/><con:parameters/><con:representation type="FAULT"><con:mediaType>text/html;charset=UTF-8</con:mediaType><con:status>404</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>application/xml</con:mediaType><con:params/><con:element>wddxPacket</con:element></con:representation><con:representation type="FAULT"><con:mediaType>text/html;charset=utf-8</con:mediaType><con:status>415 500 404</con:status><con:params/><con:element>html</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType>text/plain;charset=UTF-8</con:mediaType><con:status>200</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="REQUEST"><con:mediaType>text/xml</con:mediaType><con:params/><con:element>wddxPacket</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>404</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>404</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>404</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>404</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>404</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>404</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>404</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>404</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>404</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="FAULT"><con:mediaType xsi:nil="true"/><con:status>404</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:representation type="RESPONSE"><con:mediaType xsi:nil="true"/><con:status>0</con:status><con:params/><con:element>data</con:element></con:representation><con:request name="Request 1" mediaType="text/xml" postQueryString="false" accept=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="Accept" value="text/plain" xmlns="http://eviware.com/soapui/config"/></con:setting></con:settings><con:endpoint>http://10.10.7.29:8060/smsNotification</con:endpoint><con:request><![CDATA[<?xml version="1.0" encoding="UTF-8"?>
+<wddxPacket version="1.0">
+   <header />
+   <data>
+      <array length="1">
+         <recordset rowCount="13" fieldNames="param,value" type="coldfusion.sql.QueryTable">
+            <field name="param">
+               <string>HPAN</string>
+               <string>REQAMT</string>
+               <string>RESP</string>
+               <string>FLD_012</string>
+               <string>CARDACCIDC</string>
+               <string>CURRENCY</string>
+               <string>NETBAL</string>
+               <string>ADDRESS_NAME</string>
+               <string>CNVT_CURRENCY</string>
+               <string>UTRNNO</string>
+               <string>REVERSAL</string>
+               <string>TXNCODE</string>
+               <string>CREDIT_LIMIT</string>
+            </field>
+            <field name="value">
+               <string>4646431100005445</string>
+               <string>500.00</string>
+               <string>AP</string>
+               <string>201312161136</string>
+               <string>A7204093</string>
+               <string>980</string>
+               <number>2344.0000</number>
+               <string>3600012 SOBORNY, 18</string>
+               <string>980</string>
+               <string>34177872</string>
+               <string>0</string>
+               <string>11</string>
+               <string>3500.0000</string>
+            </field>
+         </recordset>
+      </array>
+   </data>
+</wddxPacket>
+]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:request></con:method></con:resource></con:interface><con:testSuite name="SMSNotificationServiceSoapBinding TestSuite"><con:settings/><con:runType>SEQUENTIAL</con:runType><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="sendSMSMessage TestCase" searchProperties="true"><con:settings/><con:testStep type="request" name="sendSMSMessage"><con:settings/><con:config xsi:type="con:RequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:interface>SMSNotificationServiceSoapBinding</con:interface><con:operation>sendSMSMessage</con:operation><con:request name="sendSMSMessage" outgoingWss="" incomingWss="" timeout="" sslKeystore="" useWsAddressing="false" useWsReliableMessaging="false" wssPasswordType=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;xml-fragment/></con:setting></con:settings><con:encoding>UTF-8</con:encoding><con:endpoint>http://192.168.103.40:8081/SMSNotificationService/SMSNotificationService</con:endpoint><con:request><![CDATA[<soapenv:Envelope xmlns:soapenv="http://schemas.xmlsoap.org/soap/envelope/" xmlns:inp="http://input.smsnotification.bitbank.com/">
+   <soapenv:Header/>
+   <soapenv:Body>
+      <inp:sendSMSMessage>
+         <!--Optional:-->
+         <smsMessage>
+            <!--Optional:-->
+            <activityID>123</activityID>
+            <!--Optional:-->
+            <phone>+380111111111</phone>
+            <!--Optional:-->
+            <smsText>high load text</smsText>
+         </smsMessage>
+      </inp:sendSMSMessage>
+   </soapenv:Body>
+</soapenv:Envelope>]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:wsaConfig mustUnderstand="NONE" version="200508" action="http://input.smsnotification.bitbank.com/SoapMessageReceiver/sendSMSMessage"/><con:wsrmConfig version="1.2"/></con:request></con:config></con:testStep><con:loadTest name="LoadTest 1"><con:settings><con:setting id="HttpSettings@close-connections">false</con:setting></con:settings><con:threadCount>7</con:threadCount><con:startDelay>0</con:startDelay><con:sampleInterval>250</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>120</con:testLimit><con:limitType>TIME</con:limitType><con:loadStrategy><con:type>Simple</con:type></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval></con:loadTest><con:properties/></con:testCase><con:testCase failOnError="true" failTestCaseOnErrors="true" keepSession="false" maxResults="0" name="TestCaseUfn" searchProperties="true"><con:settings/><con:testStep type="restrequest" name="REST Test Request"><con:settings/><con:config service="UfnSmsController" resourcePath="/ufn/operationPerformed" methodName="operationPerformedMeth" xsi:type="con:RestRequestStep" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><con:restRequest name="REST Test Request" mediaType="text/xml" postQueryString="false" accept=""><con:settings><con:setting id="com.eviware.soapui.impl.wsdl.WsdlRequest@request-headers">&lt;entry key="Accept" value="text/plain" xmlns="http://eviware.com/soapui/config"/></con:setting></con:settings><con:endpoint>http://localhost:8080/smsnotification</con:endpoint><con:request><![CDATA[<wddxPacket version='1.0'>
+<header/>
+<data>
+  <array length='1'>
+    <recordset rowCount='13' fieldNames='param,value' 
+type='coldfusion.sql.QueryTable'>
+      <field name='param'>
+        <string>HPAN</string>
+        <string>REQAMT</string>
+        <string>RESP</string>
+        <string>FLD_012</string>
+        <string>CARDACCIDC</string>
+        <string>CURRENCY</string>
+        <string>NETBAL</string>
+        <string>ADDRESS_NAME</string>
+        <string>CNVT_CURRENCY</string>
+        <string>UTRNNO</string>
+        <string>REVERSAL</string>
+        <string>TXNCODE</string>
+        <string>CREDIT_LIMIT</string>
+      </field>
+      <field name='value'>
+        <string>cardnumber</string>
+        <string>123.45</string>
+        <string>ET</string>
+        <string>20081022110355</string>
+        <string>TERMCODE</string>
+        <string>980</string>
+        <number>567.89</number>
+        <string>ABC street, 25, TC XYZ</string>
+        <string>980</string>
+        <string>012345</string>
+        <string>0</string>
+        <string>1</string>
+        <number>10000.00</number>
+      </field>
+    </recordset>
+  </array>
+</data>
+</wddxPacket>
+]]></con:request><con:credentials><con:authType>Global HTTP Settings</con:authType></con:credentials><con:jmsConfig JMSDeliveryMode="PERSISTENT"/><con:jmsPropertyConfig/><con:parameters/></con:restRequest></con:config></con:testStep><con:loadTest name="LoadTestUfnPerfOperation"><con:settings><con:setting id="HttpSettings@close-connections">false</con:setting></con:settings><con:threadCount>5</con:threadCount><con:startDelay>0</con:startDelay><con:sampleInterval>250</con:sampleInterval><con:calculateTPSOnTimePassed>true</con:calculateTPSOnTimePassed><con:resetStatisticsOnThreadCountChange>true</con:resetStatisticsOnThreadCountChange><con:historyLimit>-1</con:historyLimit><con:testLimit>120</con:testLimit><con:limitType>TIME</con:limitType><con:loadStrategy><con:type>Simple</con:type></con:loadStrategy><con:assertion type="Step Status" name="Step Status"/><con:maxAssertionErrors>100</con:maxAssertionErrors><con:cancelExcessiveThreads>true</con:cancelExcessiveThreads><con:strategyInterval>500</con:strategyInterval></con:loadTest><con:properties/></con:testCase><con:properties/></con:testSuite><con:properties/><con:wssContainer/><con:sensitiveInformation/></con:soapui-project>

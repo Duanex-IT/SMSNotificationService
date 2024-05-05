@@ -1,0 +1,1 @@
+alter table ns_input_sms modify SMSTEXT VARCHAR(3000 CHAR);

@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?><definitions
+ xmlns="http://schemas.xmlsoap.org/wsdl/"
+ xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+ targetNamespace="http://siebel.com/CustomUI"
+ xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/"
+ xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+ xmlns:tns="http://siebel.com/CustomUI"
+><types
+></types
+><message
+ name="getMobilePhoneByCardNum_Input"
+><part
+ name="hashCardNum"
+ type="xsd:string"
+></part
+></message
+><message
+ name="getMobilePhoneByCardNum_Output"
+><part
+ name="errorCode"
+ type="xsd:string"
+></part
+><part
+ name="errorText"
+ type="xsd:string"
+></part
+><part
+ name="mobilePhone"
+ type="xsd:string"
+></part
+></message
+><portType
+ name="BIT_spcUtils"
+><operation
+ name="getMobilePhoneByCardNum"
+><input
+ message="tns:getMobilePhoneByCardNum_Input"
+></input
+><output
+ message="tns:getMobilePhoneByCardNum_Output"
+></output
+></operation
+></portType
+><binding
+ name="BIT_spcUtils"
+ type="tns:BIT_spcUtils"
+><soap:binding
+ transport="http://schemas.xmlsoap.org/soap/http"
+ style="rpc"
+></soap:binding
+><operation
+ name="getMobilePhoneByCardNum"
+><soap:operation
+ soapAction="rpc/http://siebel.com/CustomUI:getMobilePhoneByCardNum"
+></soap:operation
+><input
+><soap:body
+ namespace="http://siebel.com/CustomUI"
+ use="literal"
+></soap:body
+></input
+><output
+><soap:body
+ namespace="http://siebel.com/CustomUI"
+ use="literal"
+></soap:body
+></output
+></operation
+></binding
+><service
+ name="BIT_spcUtils"
+><port
+ binding="tns:BIT_spcUtils"
+ name="BIT_spcUtils"
+><soap:address
+ location="http://192.168.103.30/eai_anon_rus/start.swe?SWEExtSource=SecureWebService&amp;SWEExtCmd=Execute"
+></soap:address
+></port
+></service
+></definitions
+>

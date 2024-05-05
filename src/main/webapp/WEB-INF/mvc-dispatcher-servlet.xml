@@ -1,0 +1,173 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:jaxws="http://cxf.apache.org/jaxws"
+       xmlns:jaxrs="http://cxf.apache.org/jaxrs"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xmlns:task="http://www.springframework.org/schema/task"
+       xsi:schemaLocation="
+    	http://www.springframework.org/schema/beans
+	    http://www.springframework.org/schema/beans/spring-beans.xsd
+	    http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd
+        http://www.springframework.org/schema/context
+        http://www.springframework.org/schema/context/spring-context.xsd
+	    http://cxf.apache.org/jaxws
+	    http://cxf.apache.org/schemas/jaxws.xsd
+	    http://cxf.apache.org/jaxrs
+        http://cxf.apache.org/schemas/jaxrs.xsd
+        http://www.springframework.org/schema/tx
+        http://www.springframework.org/schema/tx/spring-tx.xsd
+        http://www.springframework.org/schema/task
+        http://www.springframework.org/schema/task/spring-task-3.0.xsd">
+
+    <context:annotation-config/>
+    <tx:annotation-driven/>
+    <task:annotation-driven executor="singleThreadExecutor"/>
+    <task:executor id="singleThreadExecutor" pool-size="1"/>
+
+    <context:component-scan base-package="com.bitbank.smsnotification.**"/>
+
+
+    <import resource="classpath:META-INF/cxf/cxf.xml"/>
+    <import resource="classpath:META-INF/cxf/cxf-servlet.xml"/>
+
+    <jaxws:endpoint
+            id="customersSmsService"
+            implementor="com.bitbank.smsnotification.controller.CustomersSmsServiceImpl"
+            address="/CustomersSmsService"/>
+
+    <jaxws:endpoint
+            id="smsNotification"
+            implementor="com.bitbank.smsnotification.input.SoapMessageReceiverImpl"
+            address="/SMSNotificationService"/>
+    <jaxrs:server id="smsNotificationRest" address="/RestSMSNotificationService">
+        <jaxrs:serviceBeans>
+            <ref bean="SoapMessageReceiver" />
+        </jaxrs:serviceBeans>
+        <jaxrs:providers>
+            <bean class="org.codehaus.jackson.jaxrs.JacksonJaxbJsonProvider"/>
+        </jaxrs:providers>
+    </jaxrs:server>
+
+    <jaxrs:server id="ufn" address="/ufn">
+        <jaxrs:serviceBeans>
+            <ref bean="UfnInputController" />
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+
+    <jaxrs:server id="KsCpaResource" address="/KsCpaResource">
+        <jaxrs:serviceBeans>
+            <ref bean="KsCpaSmsReceiver" />
+        </jaxrs:serviceBeans>
+    </jaxrs:server>
+
+    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping" />
+
+    <bean class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+        <property name="prefix" value="/WEB-INF/pages/"/>
+        <property name="suffix" value=".jsp"/>
+    </bean>
+
+    <bean id="messageSource"
+          class="org.springframework.context.support.ReloadableResourceBundleMessageSource">
+        <property name="basename" value="classpath:localization" />
+        <property name="defaultEncoding" value="UTF-8"/>
+        <property name="fileEncodings" value="UTF-8"/>
+        <property name="useCodeAsDefaultMessage" value="false"/>
+    </bean>
+    <bean id="resourceUtils"
+          class="com.bitbank.bitutils.utils.ResourceUtils">
+        <property name="resource" ref="messageSource" />
+    </bean>
+
+    <bean id="localeResolver"
+          class="org.springframework.web.servlet.i18n.CookieLocaleResolver">
+        <property name="defaultLocale" value="ru"/>
+    </bean>
+
+    <bean class = "org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
+        <property name="messageConverters">
+            <array>
+                <bean class = "org.springframework.http.converter.StringHttpMessageConverter">
+                    <property name="supportedMediaTypes" value = "text/plain;charset=UTF-8" />
+                </bean>
+            </array>
+        </property>
+    </bean>
+
+    <!--//////////HIBERNATE/////////////////////-->
+    <bean class="org.springframework.beans.factory.config.PropertyPlaceholderConfigurer">
+        <property name="location" value="file:${bit_config}smsnotification.properties"/>
+        <property name="systemPropertiesMode" value="2"/>
+    </bean>
+
+    <bean id="dataSource"
+          class="org.springframework.jdbc.datasource.DriverManagerDataSource">
+        <property name="driverClassName" value="oracle.jdbc.OracleDriver" />
+        <property name="url" value="${connection.url}" />
+        <property name="username" value="${connection.username}" />
+        <property name="password" value="${connection.password}" />
+    </bean>
+
+    <!-- Hibernate session factory -->
+    <bean id="sessionFactory"
+          class="org.springframework.orm.hibernate4.LocalSessionFactoryBean">
+
+        <property name="dataSource" ref="dataSource"/>
+
+        <property name="hibernateProperties">
+            <props>
+                <prop key="hibernate.dialect">org.hibernate.dialect.Oracle10gDialect</prop>
+                <prop key="hibernate.show_sql">false</prop>
+                <prop key="hbm2ddl.auto">validate</prop>
+                <prop key="hibernate.id.new_generator_mappings">true</prop>
+
+                <prop key="hibernate.c3p0.min_size">5</prop>
+                <prop key="hibernate.c3p0.max_size">20</prop>
+                <prop key="hibernate.c3p0.timeout">60</prop>
+                <prop key="hibernate.c3p0.max_statements">50</prop>
+            </props>
+        </property>
+
+        <property name="annotatedClasses">
+            <list>
+                <value>com.bitbank.smsnotification.domain.message.SmsMessage</value>
+                <value>com.bitbank.smsnotification.domain.DeliveryReport</value>
+                <value>com.bitbank.smsnotification.domain.UfnMessageEntity</value>
+                <value>com.bitbank.smsnotification.domain.message.InputSmsDistributionEntity</value>
+                <value>com.bitbank.smsnotification.domain.message.IncomingSmsMessage</value>
+            </list>
+        </property>
+    </bean>
+
+    <bean id="transactionManager"
+          class="org.springframework.orm.hibernate4.HibernateTransactionManager">
+        <property name="sessionFactory" ref="sessionFactory" />
+    </bean>
+    <!--//////////END HIBERNATE/////////////////-->
+
+    <!-- A file based configuration bean -->
+    <bean id="configuration" primary="true" class="org.apache.commons.configuration.PropertiesConfiguration">
+        <constructor-arg type="java.net.URL" value="file:${bit_config}smsnotification.properties"/>
+        <property name="reloadingStrategy" ref="reloadingStrategy"/>
+    </bean>
+
+    <!-- The managed reloading strategy for the configuration bean -->
+    <bean id="reloadingStrategy" class="org.apache.commons.configuration.reloading.FileChangedReloadingStrategy"/>
+
+    <bean id="securityUtils" class="com.bitbank.bitutils.utils.SecurityUtils" />
+
+
+    <bean id="emailSender" class="com.bitbank.notificator.core.sender.EmailSender">
+        <constructor-arg name="project" value="SMSNotificationService"/>
+        <constructor-arg name="recipients" value="${notificate.error.emails}"/>
+    </bean>
+    <!-- A file based configuration bean -->
+    <bean id="senderConfiguration" class="org.apache.commons.configuration.PropertiesConfiguration" primary="false">
+        <constructor-arg type="java.net.URL" value="file:${bit_config}notificator.properties"/>
+        <property name="reloadingStrategy" ref="notifReloadingStrategy"/>
+    </bean>
+    <bean id="notifReloadingStrategy" class="org.apache.commons.configuration.reloading.FileChangedReloadingStrategy"/>
+</beans>
